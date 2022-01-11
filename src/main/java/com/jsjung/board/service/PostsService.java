@@ -2,12 +2,16 @@ package com.jsjung.board.service;
 
 import com.jsjung.board.domain.PostsRepository;
 import com.jsjung.board.domain.Posts;
+import com.jsjung.board.web.dto.PostsListResponseDto;
 import com.jsjung.board.web.dto.PostsResponseDto;
 import com.jsjung.board.web.dto.PostsSaveRequestDto;
 import com.jsjung.board.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -37,5 +41,12 @@ public class PostsService {
         posts.update(postsUpdateRequestDto.getTitle(), postsUpdateRequestDto.getContent());
 
         return id;
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc(){
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
